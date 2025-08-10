@@ -430,7 +430,7 @@ export default function DecisionsTraining() {
     }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
-  }, [phase, showFeedback, selectedAnswer, currentScenario, shuffledScenarios])
+  }, [phase, showFeedback, selectedAnswer, currentScenario, shuffledScenarios, handleNext, handleSubmit])
 
   if (phase === 'learn') {
     return (
@@ -487,19 +487,19 @@ export default function DecisionsTraining() {
                       <div className="text-xs uppercase tracking-wider text-gray-400 mb-2">🗣️ {t('decisions.label.indicators')}</div>
                       <ul className="space-y-2">
                         {style.linguisticIndicators.map((indicator, i) => (
-                          <li key={i} className="text-gray-300 font-medium italic">• "{indicator}"</li>
+                          <li key={i} className="text-gray-300 font-medium italic">• {indicator}</li>
                         ))}
                       </ul>
                     </div>
 
                     <div className="bg-gradient-to-r from-black to-gray-900 rounded-xl p-6 border border-gray-700">
                       <div className="text-xs uppercase tracking-wider text-gray-400 mb-2">🚫 {t('decisions.label.avoid')}</div>
-                      <p className="text-white italic font-medium text-lg">"{style.avoidFrames[0]}"</p>
+                      <p className="text-white italic font-medium text-lg">{style.avoidFrames[0]}</p>
                     </div>
 
                     <div className="bg-gradient-to-r from-red-500/10 to-red-600/10 rounded-xl p-6 border border-red-500/30">
                       <div className="text-xs uppercase tracking-wider text-red-700 mb-2">✅ {t('decisions.label.injection')}</div>
-                      <p className="text-red-600 italic font-medium leading-relaxed">"{style.linguisticInjection}"</p>
+                      <p className="text-red-600 italic font-medium leading-relaxed">{style.linguisticInjection}</p>
                       <div className="mt-4">
                         <span className="text-sm font-black text-red-700">{t('decisions.label.triggers')}: </span>
                         <span className="text-sm text-red-600 font-medium">{style.triggerWords.join(', ')}</span>

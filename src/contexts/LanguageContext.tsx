@@ -2,7 +2,6 @@
 
 import React, { createContext, useContext, useState, useEffect } from 'react'
 import { needsTranslations } from '@/translations/needsTranslations'
-import { needsExercisesTranslations } from '@/translations/needsExercisesTranslations'
 
 type Language = 'de' | 'en'
 
@@ -37,9 +36,11 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     localStorage.setItem('language', lang)
   }
 
-  const t = (key: string): string => {
-    return translations[language]?.[key] || translations['de']?.[key] || key
+  const getStr = (lang: Language, k: string): string | undefined => {
+    const v = (translations as Record<Language, Record<string, unknown>>)[lang]?.[k]
+    return typeof v === 'string' ? v : undefined
   }
+  const t = (key: string): string => getStr(language, key) ?? getStr('de', key) ?? key
 
   return (
     <LanguageContext.Provider value={{ language, setLanguage: handleSetLanguage, t }}>
@@ -48,7 +49,7 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   )
 }
 
-const translations = {
+const translations: Record<Language, Record<string, unknown>> = {
   de: {
     // Navigation & Layout
     'app.title': 'NCI Skills Training',

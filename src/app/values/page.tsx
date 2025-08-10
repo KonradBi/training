@@ -6,6 +6,17 @@ import { useLanguage } from '@/contexts/LanguageContext'
 import { shuffleArray } from '@/utils/shuffleArray'
 import { getTranslatedValues, getTranslatedValueScenarios } from '@/translations/valuesComplete'
 
+type ValueItem = {
+  name: string
+  description: string
+  keywords: string[]
+  emoji?: string
+  quote?: string
+  quotes?: string[]
+  injection?: string
+  injections?: string[]
+}
+
 const coreValues = [
   {
     name: "Verbindung",
@@ -147,7 +158,7 @@ export default function ValuesTraining() {
   const [bilingualLearn, setBilingualLearn] = useState(false)
 
   // Get translated data based on current language
-  const translatedValues = getTranslatedValues(language)
+  const translatedValues = getTranslatedValues(language) as ValueItem[]
 
   // Update scenarios when language changes
   useEffect(() => {
@@ -242,7 +253,7 @@ export default function ValuesTraining() {
     }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
-  }, [phase, showFeedback, selectedAnswer, currentScenario, shuffledScenarios])
+  }, [phase, showFeedback, selectedAnswer, currentScenario, shuffledScenarios, handleNext, handleSubmit])
 
   if (phase === 'learn') {
     return (
@@ -282,7 +293,7 @@ export default function ValuesTraining() {
                       )}
                       <p className="text-gray-700 text-lg leading-relaxed font-light">{value.description}</p>
                     </div>
-                    <div className="text-4xl bg-gradient-to-br from-red-500 to-red-600 p-3 rounded-xl shadow-lg">{(value as any).emoji || '💎'}</div>
+                    <div className="text-4xl bg-gradient-to-br from-red-500 to-red-600 p-3 rounded-xl shadow-lg">{value.emoji ?? '💎'}</div>
                   </div>
 
                   <div className="mb-6">
@@ -298,26 +309,26 @@ export default function ValuesTraining() {
                   <div className="grid gap-4">
                     <div className="bg-gradient-to-r from-black to-gray-900 rounded-xl p-6 border border-gray-700">
                       <div className="text-xs uppercase tracking-wider text-gray-400 mb-2">{t('values.label.examples')}</div>
-                      {Array.isArray((value as any).quotes) && (value as any).quotes.length ? (
+                      {Array.isArray(value.quotes) && value.quotes.length ? (
                         <ul className="text-gray-300 space-y-1">
-                          {((value as any).quotes as string[]).map((q, i) => (
-                            <li key={i} className="text-sm">• "{q}"</li>
+                          {value.quotes.map((q, i) => (
+                            <li key={i} className="text-sm">• {q}</li>
                           ))}
                         </ul>
                       ) : (
-                        <p className="text-white italic font-medium text-lg">"{(value as any).quote}"</p>
+                        <p className="text-white italic font-medium text-lg">{value.quote}</p>
                       )}
                     </div>
                     <div className="bg-gradient-to-r from-red-500/10 to-red-600/10 rounded-xl p-6 border border-red-500/30">
                       <div className="text-xs uppercase tracking-wider text-red-700 mb-2">{t('values.label.injection')}</div>
-                      {Array.isArray((value as any).injections) && (value as any).injections.length ? (
+                      {Array.isArray(value.injections) && value.injections.length ? (
                         <ul className="text-red-700 space-y-1">
-                          {((value as any).injections as string[]).map((inj, i) => (
+                          {value.injections.map((inj, i) => (
                             <li key={i} className="text-sm">• {inj}</li>
                           ))}
                         </ul>
                       ) : (
-                        <p className="text-red-600 font-medium leading-relaxed">"{(value as any).injection}"</p>
+                        <p className="text-red-600 font-medium leading-relaxed">{value.injection}</p>
                       )}
                     </div>
                   </div>
@@ -431,7 +442,7 @@ export default function ValuesTraining() {
                     <div className="p-6 bg-gradient-to-r from-red-500/10 to-red-600/10 rounded-xl border border-red-500/30">
                       <h4 className="font-black text-red-700 mb-2">{t('values.label.injection') + ':'}</h4>
                       <p className="text-red-600 italic font-medium leading-relaxed">
-                        "{shuffledScenarios[currentScenario].injection}"
+                        {shuffledScenarios[currentScenario].injection}
                       </p>
                     </div>
                   </div>
